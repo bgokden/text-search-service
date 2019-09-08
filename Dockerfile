@@ -1,5 +1,5 @@
 
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7-alpine3.8
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.6
 
 COPY tf_embed.py requirements.txt /app/
 

@@ -1,5 +1,4 @@
-Flask==1.1.1
-Flask-Cors==3.0.8
+fastapi==0.38.1
 numpy==1.16.4
 tensorboard==1.13.1
 tensorflow==1.13.1
