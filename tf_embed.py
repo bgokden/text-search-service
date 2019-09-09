@@ -8,11 +8,10 @@ FORMAT = '%(asctime)-15s %(clientip)s %(user)-8s %(message)s'
 logging.basicConfig(format=FORMAT)
 logger = logging.getLogger('tf_embed')
 
-logger.info('Tf embed starting.')
-print('Tf embed starting.')
-
 tf_embed_loaded = False
 
+logger.info('Tf embed starting.')
+print('Tf embed starting.')
 # Graph set up.
 g = tf.Graph()
 with g.as_default():
