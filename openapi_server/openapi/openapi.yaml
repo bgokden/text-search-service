@@ -1,0 +1,187 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: berkgokden@gmail.com
+  description: This is the text search API for Veri Feature Store Project
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://veri.im/terms/
+  title: Veri Text Search API
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Veri
+  url: http://www.veri.im
+servers:
+- url: https://api.veri.im/v0
+- url: http://api.veri.im/v0
+tags:
+- description: text query and test insert
+  name: text
+paths:
+  /autocomplete:
+    post:
+      description: Autocomplete entries with text and additional parameters
+      operationId: autocomplete
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Query'
+        description: Query text with context
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+        "400":
+          content: {}
+          description: Invalid Query
+        "404":
+          content: {}
+          description: No Results
+      security:
+      - ApiKeyAuth:
+        - read
+      summary: Autocomplete entries with text
+      tags:
+      - text
+      x-codegen-request-body-name: body
+      x-openapi-router-controller: openapi_server.controllers.text_controller
+  /insert:
+    post:
+      operationId: insert
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/Entry'
+              type: array
+        description: Insert a new entry
+        required: true
+      responses:
+        default:
+          content: {}
+          description: successful operation
+      security:
+      - ApiKeyAuth:
+        - write
+      summary: Inserts a list of entries with given input array
+      tags:
+      - text
+      x-codegen-request-body-name: body
+      x-openapi-router-controller: openapi_server.controllers.text_controller
+  /search:
+    post:
+      description: Search entries with text and additional parameters
+      operationId: search
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Query'
+        description: Query text with context
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+        "400":
+          content: {}
+          description: Invalid Query
+        "404":
+          content: {}
+          description: No Results
+      security:
+      - ApiKeyAuth:
+        - read
+      summary: Search entries with text
+      tags:
+      - text
+      x-codegen-request-body-name: body
+      x-openapi-router-controller: openapi_server.controllers.text_controller
+components:
+  schemas:
+    Query:
+      example:
+        texts:
+        - texts
+        - texts
+        context:
+        - context
+        - context
+        options:
+          key: '{}'
+      properties:
+        texts:
+          items:
+            type: string
+          type: array
+        context:
+          items:
+            type: string
+          type: array
+        options:
+          additionalProperties: true
+          type: object
+      type: object
+    ApiResponse:
+      example:
+        result:
+        - label: label
+          title: title
+        - label: label
+          title: title
+        code: 0
+        link: link
+        type: type
+        message: message
+      properties:
+        code:
+          format: int32
+          title: code
+          type: integer
+        type:
+          title: type
+          type: string
+        message:
+          title: message
+          type: string
+        result:
+          items:
+            $ref: '#/components/schemas/Entry'
+          title: result
+          type: array
+        link:
+          title: link
+          type: string
+      title: ApiResponse
+      type: object
+    Entry:
+      additionalProperties: true
+      example:
+        label: label
+        title: title
+      properties:
+        title:
+          type: string
+        label:
+          type: string
+      required:
+      - label
+      - title
+      title: Entry
+      type: object
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: ApiKeyAuth
+      type: apiKey
+      x-apikeyInfoFunc: openapi_server.controllers.security_controller_.info_from_ApiKeyAuth
